@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Kamu ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffe6e6; /* Warna pink pastel */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Mencegah layar bisa di-scroll saat bunga jatuh */
+            text-align: center;
+        }
+        h1 {
+            color: #ff4d4d;
+            margin-bottom: 20px;
+            z-index: 10;
+            padding: 0 20px;
+        }
+        .buttons {
+            position: relative;
+            z-index: 10;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        #btnYes {
+            background-color: #ff4d4d;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #btnYes:hover {
+            background-color: #ff1a1a;
+            transform: scale(1.1);
+        }
+        #btnNo {
+            background-color: #f2f2f2;
+            color: #666;
+            transition: 0.1s; /* Transisi cepat biar gampang kabur */
+        }
+        /* Style untuk animasi bunga */
+        .flower {
+            position: absolute;
+            user-select: none;
+            pointer-events: none; /* Biar bunga gak ganggu pas mau klik tombol */
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        #message {
+            display: none;
+            font-size: 28px;
+            color: #e60000;
+            font-weight: bold;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="question">Hai, kamu mau nggak jadi Valentine aku? 🥺👉👈</h1>
+
+    <div class="buttons" id="btnContainer">
+        <button id="btnYes" onclick="accept()">Mau banget! ❤️</button>
+        <button id="btnNo" onmouseover="dodge()">Nggak ah</button>
+    </div>
+
+    <div id="message">Yeyyy! I Love You! 🌸🌷💖🥰</div>
+
+    <script>
+        // Fitur kabur untuk tombol "Nggak"
+        const btnNo = document.getElementById('btnNo');
+        function dodge() {
+            btnNo.style.position = 'absolute';
+            // Random posisi agar tidak keluar dari layar
+            const x = Math.random() * 80;
+            const y = Math.random() * 80;
+            btnNo.style.left = x + 'vw';
+            btnNo.style.top = y + 'vh';
+        }
+
+        // Fitur diterima (Yes)
+        function accept() {
+            document.getElementById('question').style.display = 'none';
+            document.getElementById('btnContainer').style.display = 'none';
+            document.getElementById('message').style.display = 'block';
+            
+            // Ledakan bunga
+            for(let i = 0; i < 60; i++) {
+                setTimeout(createFlower, i * 50);
+            }
+        }
+
+        // Fitur interaktif bunga-bunga jatuh
+        function createFlower() {
+            const flower = document.createElement('div');
+            const flowers = ['🌸', '🌷', '🌹', '🌺', '💖']; // Pilihan emoji
+            flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+            flower.classList.add('flower');
+            
+            // Random letak dan ukuran
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.top = '-50px';
+            flower.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            flower.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            
+            document.body.appendChild(flower);
+            
+            // Hapus elemen setelah selesai biar browser gak lemot
+            setTimeout(() => {
+                flower.remove();
+            }, 5000);
+        }
+
+        // Bunga jatuh otomatis setiap 400ms sebagai background
+        setInterval(createFlower, 400);
+
+        // Interaksi klik layar: munculin bunga pas di-klik di mana aja
+        document.body.addEventListener('click', function(e) {
+            // Hindari bikin bunga dobel kalau ngeklik tombol
+            if(e.target.tagName === 'BUTTON') return; 
+
+            const clickFlower = document.createElement('div');
+            clickFlower.innerText = '✨';
+            clickFlower.style.position = 'absolute';
+            clickFlower.style.left = (e.clientX - 15) + 'px';
+            clickFlower.style.top = (e.clientY - 15) + 'px';
+            clickFlower.style.fontSize = '30px';
+            clickFlower.style.pointerEvents = 'none';
+            clickFlower.style.animation = 'fall 2s linear forwards';
+            document.body.appendChild(clickFlower);
+            
+            setTimeout(() => clickFlower.remove(), 2000);
+        });
+    </script>
+</body>
+</html>
